@@ -20,6 +20,7 @@ const initialState: AttendanceState = {
 
 const visitorTypes = ["siswa", "umum"] as const;
 type VisitorType = (typeof visitorTypes)[number];
+const publicAttendanceSignupHref = "/signup?next=/public/absensi";
 
 function normalizeStudentText(value: string) {
   return value.trim().replace(/\s+/g, " ").toLowerCase();
@@ -321,10 +322,13 @@ export function PublicAttendanceForm({
         <div className="space-y-2 break-words rounded-xl border border-sky-200 bg-sky-50 px-4 py-3 text-sm text-sky-800">
           <p>
             Siswa belum terdaftar? Daftar melalui{" "}
-            <Link href="/signup" className="font-semibold text-[#1d66d6] underline">
+            <Link
+              href={publicAttendanceSignupHref}
+              className="font-semibold text-[#1d66d6] underline"
+            >
               halaman pendaftaran
             </Link>{" "}
-            lalu minta pustakawan untuk menyetujuinya.
+            lalu kembali ke absensi publik.
           </p>
         </div>
       ) : null}
@@ -334,10 +338,13 @@ export function PublicAttendanceForm({
           <p>Nama siswa belum terdaftar di sistem.</p>
           <p>
             Daftar melalui{" "}
-            <Link href="/signup" className="font-semibold text-[#1d66d6] underline">
+            <Link
+              href={publicAttendanceSignupHref}
+              className="font-semibold text-[#1d66d6] underline"
+            >
               halaman pendaftaran
             </Link>{" "}
-            lalu minta pustakawan untuk menyetujuinya.
+            lalu kembali ke absensi publik.
           </p>
         </div>
       ) : null}

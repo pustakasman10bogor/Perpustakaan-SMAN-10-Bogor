@@ -157,6 +157,8 @@ export async function signupSiswa(
   try {
     const state = await registerSiswaAccount(formData);
     revalidatePath("/admin");
+    revalidatePath("/public");
+    revalidatePath("/public/absensi");
     return state;
   } catch (error) {
     const message =

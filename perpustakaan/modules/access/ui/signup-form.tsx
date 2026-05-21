@@ -8,6 +8,7 @@ import { PasswordInput } from "@/modules/access/ui/password-input";
 const initialState: SignupFormState = {
   error: "",
   success: "",
+  returnTo: "",
 };
 
 type SignupFields = {
@@ -34,9 +35,20 @@ const initialFields: SignupFields = {
   confirm_password: "",
 };
 
-export function SignupForm() {
+export function SignupForm({
+  returnHref = "/",
+  returnLabel = "Kembali ke halaman login",
+}: {
+  returnHref?: string;
+  returnLabel?: string;
+}) {
   const [state, formAction, pending] = useActionState(signupSiswa, initialState);
   const [fields, setFields] = useState<SignupFields>(initialFields);
+  const successReturnHref = state?.returnTo || returnHref;
+  const successReturnsToPublicAttendance = successReturnHref === "/public/absensi";
+  const successReturnLabel = successReturnsToPublicAttendance
+    ? "Kembali ke absensi publik"
+    : returnLabel;
 
   function updateField(field: keyof SignupFields, value: string) {
     setFields((currentFields) => ({
@@ -61,16 +73,23 @@ export function SignupForm() {
           </p>
         </div>
 
-        <div className="mt-6 break-words rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm leading-6 text-emerald-800">
-          Setelah admin menyetujui pendaftaran, masuk kembali melalui halaman
-          login dengan username atau email yang sudah didaftarkan.
-        </div>
+        {successReturnsToPublicAttendance ? (
+          <div className="mt-6 break-words rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm leading-6 text-emerald-800">
+            Kamu sudah bisa kembali ke absensi publik dan memilih nama yang baru
+            didaftarkan. Login siswa tetap menunggu persetujuan admin.
+          </div>
+        ) : (
+          <div className="mt-6 break-words rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm leading-6 text-emerald-800">
+            Setelah admin menyetujui pendaftaran, masuk kembali melalui halaman
+            login dengan username atau email yang sudah didaftarkan.
+          </div>
+        )}
 
         <Link
-          href="/"
+          href={successReturnHref}
           className="mt-6 inline-flex min-h-[44px] w-full items-center justify-center rounded-2xl bg-[#145da0] px-5 py-3 text-sm font-medium text-white transition hover:bg-[#0f4f8a]"
         >
-          Kembali ke halaman login
+          {successReturnLabel}
         </Link>
       </div>
     );
@@ -92,6 +111,7 @@ export function SignupForm() {
       </div>
 
       <form action={formAction} className="mt-6 grid gap-4 md:grid-cols-2">
+        <input type="hidden" name="return_to" value={returnHref} />
         <Field
           id="nama"
           label="Nama lengkap"

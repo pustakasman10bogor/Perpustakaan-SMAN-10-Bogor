@@ -4,6 +4,7 @@ import { getServerSupabaseClient } from "@/lib/supabase-server";
 export type SignupState = {
   error: string;
   success: string;
+  returnTo?: string;
 };
 
 export type PendingSiswa = {
@@ -143,6 +144,7 @@ async function checkExistingSiswa(
 }
 
 export async function registerSiswaAccount(formData: FormData): Promise<SignupState> {
+  const returnTo = normalizeValue(String(formData.get("return_to") ?? ""));
   const nama = normalizeValue(String(formData.get("nama") ?? ""));
   const nisn = normalizeValue(String(formData.get("nisn") ?? ""));
   const tahunMasuk = normalizeValue(String(formData.get("tahun_masuk") ?? ""));
@@ -167,6 +169,7 @@ export async function registerSiswaAccount(formData: FormData): Promise<SignupSt
     return {
       error: "Semua data siswa wajib diisi.",
       success: "",
+      returnTo,
     };
   }
 
@@ -174,6 +177,7 @@ export async function registerSiswaAccount(formData: FormData): Promise<SignupSt
     return {
       error: "Password minimal 8 karakter.",
       success: "",
+      returnTo,
     };
   }
 
@@ -181,6 +185,7 @@ export async function registerSiswaAccount(formData: FormData): Promise<SignupSt
     return {
       error: "Konfirmasi password belum sama.",
       success: "",
+      returnTo,
     };
   }
 
@@ -190,6 +195,7 @@ export async function registerSiswaAccount(formData: FormData): Promise<SignupSt
     return {
       error: duplicateMessage,
       success: "",
+      returnTo,
     };
   }
 
@@ -216,6 +222,7 @@ export async function registerSiswaAccount(formData: FormData): Promise<SignupSt
     error: "",
     success:
       "Pendaftaran berhasil. Akun kamu sedang menunggu verifikasi admin perpustakaan.",
+    returnTo,
   };
 }
 

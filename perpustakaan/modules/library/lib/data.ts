@@ -859,7 +859,7 @@ export async function getStudentNameSuggestions(limit = 250) {
   const { data, error } = await supabase
     .from("siswa")
     .select("id_siswa, nama, nisn, kelas")
-    .eq("status_keanggotaan", "aktif")
+    .in("status_keanggotaan", ["aktif", "menunggu_verifikasi"])
     .not("nama", "is", null)
     .order("nama", { ascending: true })
     .limit(limit)

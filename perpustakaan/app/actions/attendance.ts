@@ -68,7 +68,6 @@ export async function submitPublicAttendance(
       .from("siswa")
       .select("id_siswa, nama, kelas, status_keanggotaan")
       .eq("id_siswa", idSiswa)
-      .eq("status_keanggotaan", "aktif")
       .single<{
         id_siswa: number;
         nama: string;
@@ -78,7 +77,14 @@ export async function submitPublicAttendance(
 
     if (selectedSiswa.error || !selectedSiswa.data) {
       return {
-        error: "Nama siswa belum terdaftar atau masih menunggu verifikasi pustakawan.",
+        error: "Nama siswa belum terdaftar. Daftar dulu lalu kembali ke absensi publik.",
+        success: "",
+      };
+    }
+
+    if (selectedSiswa.data.status_keanggotaan === "nonaktif") {
+      return {
+        error: "Akun siswa nonaktif. Hubungi pustakawan sebelum melakukan absensi.",
         success: "",
       };
     }
