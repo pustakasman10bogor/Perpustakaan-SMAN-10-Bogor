@@ -1,7 +1,7 @@
 @echo off
 setlocal
 
-set "BASE_URL=http://localhost:3000"
+set "BASE_URL=https://perpustakaan-sman-10-bogor.vercel.app/"
 set "CHROME=%ProgramFiles%\Google\Chrome\Application\chrome.exe"
 
 if not exist "%CHROME%" (
